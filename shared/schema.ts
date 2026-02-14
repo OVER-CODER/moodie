@@ -1,11 +1,11 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, doublePrecision } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const moodLogs = pgTable("mood_logs", {
   id: serial("id").primaryKey(),
   mood: text("mood").notNull(), // e.g., 'calm', 'energized', 'anxious'
-  confidence: integer("confidence").notNull(), // 0-100
+  confidence: doublePrecision("confidence").notNull(), // Changed from integer to doublePrecision to handle decimal values like 0.92
   method: text("method").notNull(), // 'face' | 'self'
   inputData: text("input_data"), // The text input or image hash/reference
   recommendations: jsonb("recommendations").notNull(), // Store the generated recommendations snapshot
