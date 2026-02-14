@@ -6,10 +6,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 
+import GamesReel from "@/pages/GamesReel";
+
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/games" component={GamesReel} />
       <Route component={NotFound} />
     </Switch>
   );

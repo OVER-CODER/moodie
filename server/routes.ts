@@ -3,8 +3,9 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { analyzeMood, getRecommendations } from "@shared/mood-mapping";
+import { analyzeMood, getRecommendations as getLocalRecommendations } from "@shared/mood-mapping";
 import { analyzeMoodWithGemini } from "./gemini";
+import { getRecommendedGames as getRecommendations } from "./games";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -14,38 +15,84 @@ export async function registerRoutes(
   app.post(api.mood.analyze.path, async (req, res) => {
     try {
       const input = api.mood.analyze.input.parse(req.body);
-      
+
       let mood, confidence, recommendations;
 
       // Try Gemini API first
       const geminiResult = await analyzeMoodWithGemini(input.data || "", input.method);
-      
+
       if (geminiResult) {
         mood = geminiResult.mood;
         confidence = geminiResult.confidence;
         recommendations = geminiResult.recommendations;
+        // New fields
+        const energy = geminiResult.energy || "medium";
+        const intent = geminiResult.intent || "distract";
+
+        // Get games
+        const games = getRecommendations(mood, energy, intent);
+
+        // Store in DB (Schema update needed for energy/intent, but for now we just store basic logs to keep it simple or we can update schema later)
+        await storage.createMoodLog({
+          mood,
+          confidence,
+          method: input.method,
+          inputData: input.data || null,
+          recommendations
+        });
+
+        return res.json({
+          mood,
+          energy,
+          intent,
+          confidence,
+          recommendations,
+          games
+        });
       } else {
-        // Fallback to local logic
+        // Fallback to local logic (simplified, no games for now or random)
         const result = analyzeMood(input.method, input.data);
         mood = result.mood;
         confidence = result.confidence;
-        recommendations = getRecommendations(mood);
+        recommendations = getLocalRecommendations(mood);
+
+        // Infer reasonable defaults for energy and intent based on mood
+        let defaultEnergy: "low" | "medium" | "high" = "medium";
+        let defaultIntent: "relax" | "distract" | "focus" | "uplift" | "express" = "distract";
+
+        switch (mood.toLowerCase()) {
+          case 'happy':
+            defaultEnergy = "high";
+            defaultIntent = "uplift";
+            break;
+          case 'energized':
+            defaultEnergy = "high";
+            defaultIntent = "focus";
+            break;
+          case 'tired':
+            defaultEnergy = "low";
+            defaultIntent = "relax";
+            break;
+          case 'calm':
+            defaultEnergy = "low";
+            defaultIntent = "focus";
+            break;
+          case 'anxious':
+            defaultEnergy = "medium"; // Distraction usually helps anxiety
+            defaultIntent = "distract";
+            break;
+        }
+
+        return res.json({
+          mood,
+          energy: defaultEnergy,
+          intent: defaultIntent,
+          confidence,
+          recommendations,
+          games: getRecommendations(mood, defaultEnergy, defaultIntent)
+        });
       }
 
-      // Store in DB
-      await storage.createMoodLog({
-        mood,
-        confidence,
-        method: input.method,
-        inputData: input.data || null,
-        recommendations
-      });
-
-      res.json({
-        mood,
-        confidence,
-        recommendations
-      });
     } catch (err) {
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });

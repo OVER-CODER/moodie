@@ -19,19 +19,25 @@ interface MoodAnalysisResult {
   };
 }
 
-export async function analyzeMoodWithGemini(input: string, method: 'face' | 'self'): Promise<MoodAnalysisResult | null> {
+export async function analyzeMoodWithGemini(input: string, method: 'face' | 'self'): Promise<any | null> {
   if (!model) {
     console.warn("Gemini API key not found. Falling back to local analysis.");
     return null;
   }
 
   try {
-    const prompt = `
+    let prompt = "";
+    // Note: 'face' method is effectively deprecated/removed by user request, 
+    // but keeping logic safe incase we revert or reuse. Main path is 'self' (text).
+
+    prompt = `
       Analyze the mood of a person based on this input: "${input}" (Method: ${method}).
       
       Return a JSON object with the following structure:
       {
-        "mood": "calm" | "energized" | "happy" | "tired" | "anxious",
+        "mood": "calm" | "energized" | "happy" | "tired" | "anxious" | "bored" | "stressed" | "romantic" | "confident" | "sad",
+        "energy": "low" | "medium" | "high",
+        "intent": "relax" | "distract" | "focus" | "uplift" | "express",
         "confidence": number (0.0 to 1.0),
         "recommendations": {
           "outfit": ["string", "string", "string"],
@@ -44,18 +50,18 @@ export async function analyzeMoodWithGemini(input: string, method: 'face' | 'sel
       }
       
       Ensure the playlist ID is real and popular for that mood.
-      For "face" method, assume the input is a description of facial features or expression if provided, otherwise infer a mood suitable for a random check-in but vary it.
-      If the input is vague, make a best guess.
+      Analyze the input to determine the core mood, energy level, and user's intent.
+      If the input is vague, make a best guess based on the tone.
     `;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Clean up potential markdown code blocks
     const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-    const data = JSON.parse(jsonStr) as MoodAnalysisResult;
-    
+    const data = JSON.parse(jsonStr);
+
     return data;
   } catch (error) {
     console.error("Gemini API error:", error);

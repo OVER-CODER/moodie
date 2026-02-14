@@ -13,6 +13,8 @@ export const api = {
       responses: {
         200: z.object({
           mood: z.string(),
+          energy: z.enum(['low', 'medium', 'high']),
+          intent: z.enum(['relax', 'distract', 'focus', 'uplift', 'express']),
           confidence: z.number(),
           recommendations: z.object({
             outfit: z.array(z.string()),
@@ -22,6 +24,15 @@ export const api = {
             affirmation: z.string(),
             productivity: z.string(),
           }),
+          games: z.array(z.object({
+            id: z.string(),
+            title: z.string(),
+            url: z.string(),
+            thumbnail: z.string().optional(),
+            description: z.string().optional(),
+            energy: z.enum(['low', 'medium', 'high']),
+            moods: z.array(z.string()),
+          })),
         }),
         400: z.object({ message: z.string() }),
       },

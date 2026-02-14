@@ -12,9 +12,9 @@ export const moodLogs = sqliteTable("mood_logs", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()), // SQLite doesn't have native timestamp, store as int/date
 });
 
-export const insertMoodLogSchema = createInsertSchema(moodLogs).omit({ 
-  id: true, 
-  createdAt: true 
+export const insertMoodLogSchema = createInsertSchema(moodLogs).omit({
+  id: true,
+  createdAt: true
 });
 
 export type MoodLog = typeof moodLogs.$inferSelect;
@@ -32,8 +32,30 @@ export interface Recommendation {
   productivity: string;
 }
 
+export interface Game {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail?: string;
+  description?: string;
+  energy: "low" | "medium" | "high";
+  moods: string[];
+}
+
+export interface Outfit {
+  id: string;
+  imageUrl: string;
+  style: string;
+  description: string;
+  moods: string[];
+}
+
 export interface MoodResult {
   mood: Mood;
+  energy: "low" | "medium" | "high";
+  intent: "relax" | "distract" | "focus" | "uplift" | "express";
   confidence: number;
   recommendations: Recommendation;
+  games: Game[];
+  outfits: Outfit[];
 }
