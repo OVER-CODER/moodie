@@ -5,7 +5,11 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import { analyzeMood, getRecommendations as getLocalRecommendations } from "@shared/mood-mapping";
 import { analyzeMoodWithGemini } from "./gemini";
+import { processJournalEntry } from "./journal";
 import { getRecommendedGames as getRecommendations } from "./games";
+import { getRecommendedOutfits } from "./outfits";
+import { getRecommendedPlaylists } from "./playlists";
+import { chatMessageSchema, journalChatSchema } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -29,8 +33,10 @@ export async function registerRoutes(
         const energy = geminiResult.energy || "medium";
         const intent = geminiResult.intent || "distract";
 
-        // Get games
+        // Get games, outfits, and playlists
         const games = getRecommendations(mood, energy, intent);
+        const outfits = getRecommendedOutfits(mood);
+        const playlists = getRecommendedPlaylists(mood);
 
         // Store in DB (Schema update needed for energy/intent, but for now we just store basic logs to keep it simple or we can update schema later)
         await storage.createMoodLog({
@@ -47,7 +53,9 @@ export async function registerRoutes(
           intent,
           confidence,
           recommendations,
-          games
+          games,
+          outfits,
+          playlists
         });
       } else {
         // Fallback to local logic (simplified, no games for now or random)
@@ -89,7 +97,9 @@ export async function registerRoutes(
           intent: defaultIntent,
           confidence,
           recommendations,
-          games: getRecommendations(mood, defaultEnergy, defaultIntent)
+          games: getRecommendations(mood, defaultEnergy, defaultIntent),
+          outfits: getRecommendedOutfits(mood),
+          playlists: getRecommendedPlaylists(mood)
         });
       }
 
@@ -105,6 +115,39 @@ export async function registerRoutes(
   app.get(api.mood.history.path, async (req, res) => {
     const logs = await storage.getMoodLogs();
     res.json(logs);
+  });
+
+  app.post("/api/journal/chat", async (req, res) => {
+    try {
+      const input = journalChatSchema.parse(req.body);
+      const result = await processJournalEntry(input.message, input.history);
+
+      if (result.entry) {
+        // Save the entry if generated
+        await storage.createJournalEntry({
+          userId: input.userId,
+          content: result.entry.content,
+          mood: result.entry.mood,
+          summary: result.entry.summary
+        });
+      }
+
+      res.json(result);
+    } catch (err) {
+      console.error("Journal chat error:", err);
+      res.status(500).json({ message: "Failed to process journal chat" });
+    }
+  });
+
+  app.get("/api/journal/entries/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const entries = await storage.getJournalEntries(userId);
+      res.json(entries);
+    } catch (err) {
+      console.error("Fetch entries error:", err);
+      res.status(500).json({ message: "Failed to fetch journal entries" });
+    }
   });
 
   return httpServer;

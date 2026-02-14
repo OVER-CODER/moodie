@@ -50,6 +50,14 @@ export interface Outfit {
   moods: string[];
 }
 
+export interface Playlist {
+  id: string;
+  spotifyId: string;
+  title: string;
+  description: string;
+  moods: string[];
+}
+
 export interface MoodResult {
   mood: Mood;
   energy: "low" | "medium" | "high";
@@ -58,4 +66,38 @@ export interface MoodResult {
   recommendations: Recommendation;
   games: Game[];
   outfits: Outfit[];
+  playlists: Playlist[];
 }
+
+export const journalEntries = sqliteTable("journal_entries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(), // Clerk user ID
+  content: text("content").notNull(), // The actual journal entry text
+  mood: text("mood").notNull(),
+  summary: text("summary"), // Short summary of the entry
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const insertJournalEntrySchema = createInsertSchema(journalEntries).omit({
+  id: true,
+  createdAt: true
+});
+
+export type JournalEntry = typeof journalEntries.$inferSelect;
+export type InsertJournalEntry = z.infer<typeof insertJournalEntrySchema>;
+
+export const chatMessageSchema = z.object({
+  message: z.string(),
+  history: z.array(z.object({
+    role: z.enum(["user", "model"]),
+    parts: z.string()
+  })).optional().default([])
+});
+
+export type ChatMessage = z.infer<typeof chatMessageSchema>;
+
+export const journalChatSchema = chatMessageSchema.extend({
+  userId: z.string().min(1)
+});
+
+export type JournalChatRequest = z.infer<typeof journalChatSchema>;

@@ -5,6 +5,7 @@ import { useAnalyzeMood } from '@/hooks/use-mood';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useLocation } from "wouter";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -50,8 +51,17 @@ export default function Home() {
             <span className="text-xs uppercase tracking-[0.2em] text-gray-500 mt-1">AI Lifestyle Curator</span>
           </div>
 
-          <div className="flex gap-4 text-sm font-medium text-gray-600">
-            <span className="opacity-50">v2.0</span>
+          <div className="flex gap-4 items-center">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
           </div>
         </header>
 
@@ -67,9 +77,17 @@ export default function Home() {
               <h2 className="text-4xl md:text-6xl font-serif text-gray-900 mb-6 leading-tight">
                 Your reflection tells a story.
               </h2>
-              <p className="text-lg md:text-xl text-gray-500 max-w-lg mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-500 max-w-lg mx-auto leading-relaxed mb-8">
                 Connect your inner state with your outer world. Get personalized games and lifestyle recommendations.
               </p>
+
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="bg-gray-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-all">
+                    Get Started
+                  </button>
+                </SignInButton>
+              </SignedOut>
             </motion.div>
           </div>
         )}
@@ -88,10 +106,12 @@ export default function Home() {
           </div>
         )}
 
-        {/* Bottom Interaction Area */}
-        <div className="pointer-events-auto">
-          <MoodInput onAnalyze={handleAnalyze} isAnalyzing={isPending} />
-        </div>
+        {/* Bottom Interaction Area - Protected */}
+        <SignedIn>
+          <div className="pointer-events-auto">
+            <MoodInput onAnalyze={handleAnalyze} isAnalyzing={isPending} />
+          </div>
+        </SignedIn>
       </main>
     </div>
   );

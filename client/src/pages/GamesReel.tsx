@@ -4,6 +4,7 @@ import { Game, MoodResult } from '@shared/schema';
 import { GameCard } from '@/components/GameCard';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
+import { BottomNav } from '@/components/BottomNav';
 import { useQuery } from '@tanstack/react-query'; // Using for potential future fetching
 
 export default function GamesReel() {
@@ -104,6 +105,9 @@ export default function GamesReel() {
                     </Button>
                 </div>
             </div>
+
+            {/* Bottom Navigation */}
+            <BottomNav />
         </div>
     );
 }
