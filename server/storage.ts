@@ -9,8 +9,8 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async createMoodLog(log: InsertMoodLog): Promise<MoodLog> {
-    const [newLog] = await db.insert(moodLogs).values(log).returning();
-    return newLog;
+    const result = await db.insert(moodLogs).values(log).returning();
+    return result[0];
   }
 
   async getMoodLogs(): Promise<MoodLog[]> {

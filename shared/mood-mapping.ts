@@ -4,15 +4,23 @@ export function analyzeMood(method: 'face' | 'self', data?: string): { mood: Moo
   // Simple heuristic for prototype
   if (method === 'self' && data) {
     const lower = data.toLowerCase();
-    if (lower.includes('tired') || lower.includes('sleepy')) return { mood: 'tired', confidence: 0.85 };
-    if (lower.includes('happy') || lower.includes('good')) return { mood: 'happy', confidence: 0.92 };
-    if (lower.includes('anxious') || lower.includes('worried')) return { mood: 'anxious', confidence: 0.78 };
-    if (lower.includes('excited') || lower.includes('energy')) return { mood: 'energized', confidence: 0.88 };
-    return { mood: 'calm', confidence: 0.80 }; // Default
+    if (lower.includes('tired') || lower.includes('sleepy') || lower.includes('exhausted') || lower.includes('drained')) return { mood: 'tired', confidence: 0.85 };
+    if (lower.includes('happy') || lower.includes('good') || lower.includes('great') || lower.includes('joy') || lower.includes('awesome')) return { mood: 'happy', confidence: 0.92 };
+    if (lower.includes('anxious') || lower.includes('worried') || lower.includes('stress') || lower.includes('nervous') || lower.includes('tense')) return { mood: 'anxious', confidence: 0.78 };
+    if (lower.includes('excited') || lower.includes('energy') || lower.includes('pumped') || lower.includes('ready')) return { mood: 'energized', confidence: 0.88 };
+    if (lower.includes('sad') || lower.includes('down') || lower.includes('depressed') || lower.includes('blue')) return { mood: 'tired', confidence: 0.80 }; // Map sad to tired/restful for now
+    if (lower.includes('angry') || lower.includes('mad') || lower.includes('frustrated')) return { mood: 'anxious', confidence: 0.75 }; // Map angry to anxious/calming needed
+    if (lower.includes('calm') || lower.includes('chill') || lower.includes('relax') || lower.includes('peace')) return { mood: 'calm', confidence: 0.90 };
+    
+    return { mood: 'calm', confidence: 0.60 }; // Default with lower confidence
   }
   
-  // For face, we'd use a real API, but for now we simulate
-  return { mood: 'energized', confidence: 0.92 };
+  // For face, we'd use a real API, but for now we simulate with randomization
+  const moods: Mood[] = ['calm', 'energized', 'happy', 'tired', 'anxious'];
+  const randomMood = moods[Math.floor(Math.random() * moods.length)];
+  const randomConfidence = Number((0.7 + Math.random() * 0.25).toFixed(2)); // 0.70 - 0.95
+  
+  return { mood: randomMood, confidence: randomConfidence };
 }
 
 export function getRecommendations(mood: Mood): Recommendation {

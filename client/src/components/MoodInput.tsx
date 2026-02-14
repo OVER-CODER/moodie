@@ -13,6 +13,7 @@ export function MoodInput({ onAnalyze, isAnalyzing }: MoodInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'select' | 'text' | 'camera'>('select');
   const [text, setText] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
 
   const handleTextSubmit = () => {
     if (!text.trim()) return;
@@ -22,12 +23,15 @@ export function MoodInput({ onAnalyze, isAnalyzing }: MoodInputProps) {
     setText('');
   };
 
-  const handleCameraMock = () => {
-    // In a real app, this would capture a frame from <video>
-    // Here we simulate a face scan trigger
-    onAnalyze('face');
-    setIsOpen(false);
-    setMode('select');
+  const startCameraScan = () => {
+    setIsScanning(true);
+    // Simulate scanning process
+    setTimeout(() => {
+      onAnalyze('face');
+      setIsScanning(false);
+      setIsOpen(false);
+      setMode('select');
+    }, 3000);
   };
 
   if (!isOpen) {
@@ -61,11 +65,13 @@ export function MoodInput({ onAnalyze, isAnalyzing }: MoodInputProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-4 right-4 rounded-full hover:bg-black/5"
+            className="absolute top-4 right-4 rounded-full hover:bg-black/5 z-10"
             onClick={() => {
               setIsOpen(false);
               setMode('select');
+              setIsScanning(false);
             }}
+            disabled={isScanning}
           >
             <X className="w-5 h-5" />
           </Button>
@@ -89,7 +95,7 @@ export function MoodInput({ onAnalyze, isAnalyzing }: MoodInputProps) {
                 </button>
 
                 <button
-                  onClick={handleCameraMock}
+                  onClick={() => setMode('camera')}
                   className="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300"
                 >
                   <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -116,6 +122,48 @@ export function MoodInput({ onAnalyze, isAnalyzing }: MoodInputProps) {
               <div className="flex gap-2">
                 <Button variant="ghost" className="flex-1" onClick={() => setMode('select')}>Back</Button>
                 <Button className="flex-1" onClick={handleTextSubmit} disabled={!text.trim()}>Analyze</Button>
+              </div>
+            </div>
+          )}
+
+          {mode === 'camera' && (
+            <div className="space-y-4 py-2">
+              <div className="text-center">
+                <h3 className="text-xl font-serif">Face Scan</h3>
+                <p className="text-sm text-muted-foreground">Center your face in the frame.</p>
+              </div>
+              
+              <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-inner">
+                 {!isScanning ? (
+                   <div className="absolute inset-0 flex items-center justify-center">
+                      <Camera className="w-12 h-12 text-gray-700" />
+                   </div>
+                 ) : (
+                   <>
+                     {/* Mock video feed gradient */}
+                     <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 animate-pulse" />
+                     {/* Scanner line */}
+                     <motion.div 
+                       className="absolute left-0 right-0 h-1 bg-green-500/50 shadow-[0_0_20px_rgba(34,197,94,0.5)]"
+                       animate={{ top: ['0%', '100%', '0%'] }}
+                       transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                     />
+                     <div className="absolute inset-0 flex items-center justify-center">
+                       <p className="text-white/80 font-mono tracking-widest text-sm bg-black/50 px-3 py-1 rounded">SCANNING...</p>
+                     </div>
+                   </>
+                 )}
+              </div>
+
+              <div className="flex gap-2">
+                <Button variant="ghost" className="flex-1" onClick={() => setMode('select')} disabled={isScanning}>Back</Button>
+                <Button 
+                  className="flex-1" 
+                  onClick={startCameraScan} 
+                  disabled={isScanning}
+                >
+                  {isScanning ? "Scanning..." : "Start Scan"}
+                </Button>
               </div>
             </div>
           )}

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Shirt, Music, Dumbbell, Utensils, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import { MoodResponse } from '@/hooks/use-mood';
 import { getMoodColor } from '@/lib/mood-mapping';
 

@@ -1,0 +1,5 @@
+﻿Test: "scan_1" -> Mood: energized (Confidence: 0.8)
+Test: "scan_2" -> Mood: happy (Confidence: 0.73)
+Test: "scan_3" -> Mood: calm (Confidence: 0.94)
+Test: "scan_4" -> Mood: energized (Confidence: 0.74)
+Test: "scan_5" -> Mood: anxious (Confidence: 0.73)

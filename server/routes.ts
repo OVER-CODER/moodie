@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { analyzeMood, getRecommendations } from "@shared/mood-mapping";
+import { analyzeMoodWithGemini } from "./gemini";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -14,8 +15,22 @@ export async function registerRoutes(
     try {
       const input = api.mood.analyze.input.parse(req.body);
       
-      const { mood, confidence } = analyzeMood(input.method, input.data);
-      const recommendations = getRecommendations(mood);
+      let mood, confidence, recommendations;
+
+      // Try Gemini API first
+      const geminiResult = await analyzeMoodWithGemini(input.data || "", input.method);
+      
+      if (geminiResult) {
+        mood = geminiResult.mood;
+        confidence = geminiResult.confidence;
+        recommendations = geminiResult.recommendations;
+      } else {
+        // Fallback to local logic
+        const result = analyzeMood(input.method, input.data);
+        mood = result.mood;
+        confidence = result.confidence;
+        recommendations = getRecommendations(mood);
+      }
 
       // Store in DB
       await storage.createMoodLog({

@@ -1,15 +1,15 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb, doublePrecision } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const moodLogs = pgTable("mood_logs", {
-  id: serial("id").primaryKey(),
+export const moodLogs = sqliteTable("mood_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   mood: text("mood").notNull(), // e.g., 'calm', 'energized', 'anxious'
-  confidence: doublePrecision("confidence").notNull(), // Changed from integer to doublePrecision to handle decimal values like 0.92
+  confidence: real("confidence").notNull(), // Changed from integer to doublePrecision to handle decimal values like 0.92
   method: text("method").notNull(), // 'face' | 'self'
   inputData: text("input_data"), // The text input or image hash/reference
-  recommendations: jsonb("recommendations").notNull(), // Store the generated recommendations snapshot
-  createdAt: timestamp("created_at").defaultNow(),
+  recommendations: text("recommendations", { mode: "json" }).notNull(), // Store the generated recommendations snapshot
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()), // SQLite doesn't have native timestamp, store as int/date
 });
 
 export const insertMoodLogSchema = createInsertSchema(moodLogs).omit({ 

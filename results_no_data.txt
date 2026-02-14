@@ -1,0 +1,9 @@
+﻿Sending: {"method":"face"}
+Status: 200
+Result: calm (0.77)
+Sending: {"method":"face","data":null}
+Status: 400
+Error text: {"message":"Expected string, received null"}
+Sending: {"method":"face"}
+Status: 200
+Result: calm (0.87)

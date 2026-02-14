@@ -1,0 +1,4 @@
+﻿Test: "I feel tired" -> Mood: tired (Confidence: 0.85)
+Test: "I am so happy" -> Mood: happy (Confidence: 0.92)
+Test: "I feel sad" -> Mood: tired (Confidence: 0.8)
+Test: "scan_data" -> Mood: energized (Confidence: 0.92)
