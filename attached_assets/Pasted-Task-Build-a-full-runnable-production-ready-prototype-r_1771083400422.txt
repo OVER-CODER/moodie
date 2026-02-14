@@ -1,0 +1,61 @@
+Task: Build a full, runnable, production-ready prototype repository for "MoodMirror" — a minimalist lifestyle app that detects user mood (self-report + optional face-scan) and recommends outfit, music playlist, workout type, food suggestion, affirmation, and productivity style. The UI must be **live, interactive and visually impressive** using **Three.js** for a "smart mirror" 3D scene. Keep a single-color tone design (primary color variable) and a minimalist aesthetic.
+
+Primary constraints and tech stack:
+- Frontend: React 18 + TypeScript + Vite. Use React Router for screens. CSS: modern CSS variables (no CSS frameworks). Single color tone: use one CSS variable `--primary` and monochrome neutrals. Provide a `theme.css` file.
+- 3D/visual: three.js for the main mirror scene (the "smart mirror" canvas). Include at least:
+  1. A reactive 3D mirror surface/scene that changes materials/lighting based on mood.
+  2. A clothing carousel realized as 3D cards (three.js meshes) that animate in 3D space.
+  3. A subtle, mood-driven particle system or fluid background responding to audio / mood intensity.
+  4. Camera orbit + interaction for desktop; tap gestures for mobile fallback.
+- Backend: Node.js + TypeScript + Fastify (or Express) that serves APIs:
+  - `/api/mood ->` accepts `{method: 'face'|'self', data: ...}` and returns mood label + confidence + mappings.
+  - `/api/recommendations?mood=...` returns outfit list, Spotify playlist ids, workout type, food suggestions, affirmation, productivity style.
+- Integrations:
+  - Spotify API: include authorization flow & example call to create a mood playlist (use placeholder env `SPOTIFY_CLIENT_ID`, `SPOTIFY_SECRET`). If not available, app should fallback to mock playlists.
+  - Weather API: call for local suggestions (placeholder key `WEATHER_KEY`).
+- Accessibility: all interactive elements focusable; provide alt texts; add an "Accessibility" toggle to reduce/disable motion.
+- Single color tone rules:
+  - Provide `--primary` variable (hex default `#6A8AF0` or substitute).
+  - All interactive accents and Three.js lighting should derive from `--primary` (convert to linear color where needed).
+- Minimalism: limit UI components to essential elements — mirror canvas, quick mood input, recommendations card, settings, and a small bottom tray with controls.
+- Output format:
+  - Return the full repository as a precise file tree with complete file contents for each file.
+  - Include `README.md` with local run steps: `pnpm install` (or `npm`), `pnpm dev`, env var instructions, and a one-minute demo script (what to click to show the "wow" moment).
+  - Provide a `demo-recording-instructions.md` with exact steps for a 60s demo and sample voice-over lines.
+  - Provide sample `.env.example`, unit tests for mapping logic, and a simple CI workflow (`.github/workflows/ci.yml`) that runs tests and lint.
+- Code quality: TypeScript types, lintable code, comments for non-trivial sections, and a `src/lib/mood-mapping.ts` module with clear mapping rules and tests.
+- 3JS specifics I want in the code:
+  - Use `three` + `@react-three/fiber` + `@react-three/drei` for React integration. Provide a dedicated `MirrorScene.tsx` that demonstrates:
+    - A reflective plane or shader-based mirror with environment reflections.
+    - Mood-controlled lighting (color derived from CSS `--primary` and mood intensity).
+    - A 3D outfit carousel using instanced meshes or grouped meshes with click-to-select.
+    - A reactive particle / flow field whose speed/colour maps to mood arousal.
+  - Include a dev fallback `MirrorScene.mock.tsx` that runs without a webcam or GPU.
+- UX flow:
+  1. On first load show a 3D mirror and a minimal top bar: "MoodMirror" + settings.
+  2. A floating pill: "Tell me how you feel" → options (self button opens modal with emoji + short text; face scan opens camera permission and returns mood).
+  3. After mood is detected, animate mirror + particles, then slide up a Recommendations card with: outfit thumbnails (click to preview in 3D), a Spotify "Play" button, recommended workout (short), food, affirmation, and productivity style with a short why.
+- Output content details required from Kimi:
+  - An explicit mapping table JSON (mood → outfit tags, playlist moods, workout tags, food tags, affirmation templates, productivity style rules).
+  - A minimal design tokens JSON (primary colour, spacing scale, fonts).
+  - `Figma` or `figma.json` style token export (or a simple component spec JSON) for quick mockups.
+  - A short 3-file demo: `src/pages/Home.tsx`, `src/components/MirrorScene.tsx`, `src/lib/mood-mapping.ts`.
+- Packaging & demo:
+  - Provide `pnpm` + `npm` scripts: `dev`, `build`, `preview`, `test`.
+  - `README.md` must include a “Judge 60s flow” with keyboard shortcuts to trigger demo features.
+- Deliverable format:
+  - Return as a file-by-file code block. For long files prefer a collapsible style (but ensure Kimi returns full contents). If necessary compress into a single zip and provide instruction how to unzip / run.
+- Tests & examples:
+  - Include 3 unit tests showing mood: "energized", "anxious", "calm" mapping to outputs.
+- Extra: Produce a short marketing pitch (3 bullet lines) and a 30s demo script narrating the app.
+
+Few-shot examples (use these as small examples in repo/docs and tests):
+- Input: `{method:'self', text:'I feel calm and a little tired'}` → Mood: `calm` score 0.86 → Outfit: `soft sweater + neutral pants`; Playlist: `acoustic calm playlist id (mock)`; Workout: `gentle yoga 15min`; Food: `warm soup`; Affirmation: `You are doing your best, rest is progress.`; Productivity: `low-focus, batch small tasks`.
+- Input: `{method:'face', image:'[base64]'}` → Mood: `energized` score 0.92 → Outfit: `bright jacket + trainers`; Playlist: `upbeat pop playlist id (mock)`; Workout: `HIIT 20min`; Food: `protein bowl`; Affirmation: `You’re ready — go own the moment!`; Productivity: `timeboxed sprints (25/5)`.
+
+Constraints on Kimi's response:
+- First: show a short repo tree. Then, present full file contents for every file.
+- Limit commentary: only a 3-line summary intro, then the repository.
+- Use TypeScript and include helpful inline comments in code.
+
+Return the full repository now.
