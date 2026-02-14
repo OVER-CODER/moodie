@@ -1,21 +1,19 @@
 {
     "version": 2,
+    "buildCommand": "bun run build",
     "builds": [
         {
-            "src": "package.json",
+            "src": "api/index.ts",
             "use": "@vercel/node",
             "config": {
-                "includeFiles": "dist/**"
+                "includeFiles": "dist/public/**"
             }
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "dist/index.cjs"
+            "dest": "/api/index.ts"
         }
-    ],
-    "env": {
-        "NODE_ENV": "production"
-    }
+    ]
 }
