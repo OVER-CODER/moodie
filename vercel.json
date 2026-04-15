@@ -5,12 +5,36 @@
         {
             "src": "api/index.ts",
             "use": "@vercel/node"
+        },
+        {
+            "src": "dist/public/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/api/(.*)",
             "dest": "/api/index.ts"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/dist/public/assets/$1"
+        },
+        {
+            "src": "/favicon.png",
+            "dest": "/dist/public/favicon.png"
+        },
+        {
+            "src": "/manifest.webmanifest",
+            "dest": "/dist/public/manifest.webmanifest"
+        },
+        {
+            "src": "/sw.js",
+            "dest": "/dist/public/sw.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/dist/public/index.html"
         }
     ]
 }
