@@ -1,10 +1,18 @@
 import 'dotenv/config';
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.use(express.json());
 
+// Serve static files from dist/public
+const staticPath = path.join(__dirname, '../dist/public');
+app.use(express.static(staticPath));
+
+// API Routes
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Health check passed' });
 });
@@ -36,8 +44,9 @@ app.post('/api/mood/analyze', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.json({ message: 'MoodMirror API is running' });
+// Serve index.html for all other routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 export default app;
