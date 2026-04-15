@@ -64,7 +64,9 @@ app.use((req, res, next) => {
 export { app, httpServer };
 
 // Only listen if we are NOT in a serverless environment (or explicitly running dev)
-if (require.main === module) {
+import { fileURLToPath } from "url";
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   (async () => {
     await registerRoutes(httpServer, app);
 
