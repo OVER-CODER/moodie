@@ -1,4 +1,23 @@
 {
     "buildCommand": "bun run build",
-    "outputDirectory": "dist/public"
+    "builds": [
+        {
+            "src": "api/index.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/index.ts"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/dist/public/assets/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/dist/public/index.html"
+        }
+    ]
 }
