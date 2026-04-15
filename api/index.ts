@@ -228,24 +228,44 @@ app.get('/api/mood/history', (req, res) => {
 });
 
 // Serve static files from dist/public
-const publicPath = path.join(__dirname, '../dist/public');
-console.log('Public path:', publicPath);
-console.log('Public path exists:', fs.existsSync(publicPath));
+let publicPath = '';
+try {
+  publicPath = path.join(__dirname, '../dist/public');
+  console.log('Public path:', publicPath);
+  console.log('Public path exists:', fs.existsSync(publicPath));
+} catch (err) {
+  console.log('Error resolving public path:', err);
+  publicPath = '';
+}
 
-if (fs.existsSync(publicPath)) {
-  app.use(express.static(publicPath, { maxAge: '1h' }));
+if (publicPath && fs.existsSync(publicPath)) {
+  try {
+    app.use(express.static(publicPath, { maxAge: '1h' }));
+    console.log('Static file serving enabled');
+  } catch (err) {
+    console.log('Error setting up static files:', err);
+  }
 }
 
 // SPA fallback - serve index.html for all other routes
 app.get('*', (req, res) => {
   console.log('SPA fallback for:', req.path);
+  if (!publicPath) {
+    console.log('Public path not available');
+    return res.status(404).json({ message: 'Not found', path: req.path });
+  }
   const indexPath = path.join(publicPath, 'index.html');
-  if (fs.existsSync(indexPath)) {
-    console.log('Serving index.html');
-    res.sendFile(indexPath);
-  } else {
-    console.log('index.html not found at:', indexPath);
-    res.status(404).json({ message: 'Not found', path: req.path });
+  try {
+    if (fs.existsSync(indexPath)) {
+      console.log('Serving index.html');
+      res.sendFile(indexPath);
+    } else {
+      console.log('index.html not found at:', indexPath);
+      res.status(404).json({ message: 'Not found', path: req.path });
+    }
+  } catch (err) {
+    console.log('Error serving index.html:', err);
+    res.status(500).json({ message: 'Error serving page', error: String(err) });
   }
 });
 
