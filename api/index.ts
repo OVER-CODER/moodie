@@ -1,5 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -7,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 console.log('API Handler initialized');
+console.log('__dirname:', __dirname);
 
 // Simple mood analysis function (inlined)
 function analyzeMood(method: string, data: string): { mood: string; confidence: number } {
@@ -220,7 +227,29 @@ app.get('/api/mood/history', (req, res) => {
   }
 });
 
-// Catch-all for undefined routes
+// Serve static files from dist/public
+const publicPath = path.join(__dirname, '../dist/public');
+console.log('Public path:', publicPath);
+console.log('Public path exists:', fs.existsSync(publicPath));
+
+if (fs.existsSync(publicPath)) {
+  app.use(express.static(publicPath, { maxAge: '1h' }));
+}
+
+// SPA fallback - serve index.html for all other routes
+app.get('*', (req, res) => {
+  console.log('SPA fallback for:', req.path);
+  const indexPath = path.join(publicPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    console.log('Serving index.html');
+    res.sendFile(indexPath);
+  } else {
+    console.log('index.html not found at:', indexPath);
+    res.status(404).json({ message: 'Not found', path: req.path });
+  }
+});
+
+// Catch-all for undefined routes (this may not be reached due to SPA fallback)
 app.use((req, res) => {
   console.log('404 - Not found:', req.method, req.path);
   res.status(404).json({ message: 'Not found', path: req.path });
