@@ -43,6 +43,7 @@ const GAMES_DATABASE = [
         description: "Join the numbers and get to the 2048 tile! A calming puzzle game.",
         energy: "low",
         moods: ["anxious", "tired", "bored", "calm"],
+        thumbnail: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&auto=format&fit=crop&q=60"
     },
     {
         id: "hextris",
@@ -51,6 +52,7 @@ const GAMES_DATABASE = [
         description: "An addictive puzzle game inspired by Tetris.",
         energy: "medium",
         moods: ["bored", "anxious", "focus"],
+        thumbnail: "https://images.unsplash.com/photo-1535721471682-b52f519dba45?w=800&auto=format&fit=crop&q=60"
     },
     {
         id: "crossy-road",
@@ -59,22 +61,25 @@ const GAMES_DATABASE = [
         description: "Hop across the road without getting squashed!",
         energy: "high",
         moods: ["happy", "energized"],
+        thumbnail: "https://images.unsplash.com/photo-1551885209-d8b9c47a9b8a?w=800&auto=format&fit=crop&q=60"
     },
     {
         id: "dino-run",
-        title: "Dino Run",
+        title: "Dinosaur Game",
         url: "https://chromedino.com/",
-        description: "Run, Dino, Run! A simple reflex game.",
+        description: "Classic Chrome dinosaur runner game with simple controls.",
         energy: "medium",
         moods: ["energized", "happy"],
+        thumbnail: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800&auto=format&fit=crop&q=60"
     },
     {
-        id: "sudoku",
-        title: "Sudoku",
-        url: "https://sudoku.com/expert/",
-        description: "Focus your mind with numbers.",
-        energy: "medium",
+        id: "tic-tac-toe",
+        title: "Tic Tac Toe Master",
+        url: "https://playtictactoe.org/",
+        description: "Challenge the AI in this classic strategy game.",
+        energy: "low",
         moods: ["stressed", "focus", "anxious"],
+        thumbnail: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&auto=format&fit=crop&q=60"
     },
 ];
 
