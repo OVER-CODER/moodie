@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -46,7 +47,15 @@ app.post('/api/mood/analyze', async (req, res) => {
 
 // Serve index.html for all other routes (SPA fallback)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(staticPath, 'index.html'));
+  try {
+    const indexPath = path.join(staticPath, 'index.html');
+    const indexContent = fs.readFileSync(indexPath, 'utf-8');
+    res.setHeader('Content-Type', 'text/html');
+    res.send(indexContent);
+  } catch (error) {
+    console.error('Error serving index.html:', error);
+    res.status(404).json({ message: 'Not found' });
+  }
 });
 
 export default app;
