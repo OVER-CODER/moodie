@@ -1,9 +1,6 @@
 {
     "version": 2,
     "buildCommand": "bun run build",
-    "env": {
-        "GEMINI_API_KEY": "@gemini_api_key"
-    },
     "builds": [
         {
             "src": "api/index.ts",
