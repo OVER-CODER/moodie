@@ -1,25 +1,24 @@
 import 'dotenv/config';
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+console.log('API Handler initialized');
 
 // Simple mood analysis function (inlined)
 function analyzeMood(method: string, data: string): { mood: string; confidence: number } {
   const text = method === 'self' ? (data as string) : '';
   
   const moodKeywords = {
-    happy: ['happy', 'excited', 'joy', 'great', 'wonderful', 'amazing', 'fantastic'],
-    sad: ['sad', 'depressed', 'unhappy', 'miserable', 'down', 'gloomy'],
-    anxious: ['anxious', 'worried', 'nervous', 'stressed', 'tense', 'afraid'],
-    calm: ['calm', 'peaceful', 'relaxed', 'zen', 'serene', 'tranquil'],
-    tired: ['tired', 'exhausted', 'sleepy', 'fatigued', 'drained'],
-    energized: ['energized', 'excited', 'pumped', 'motivated', 'active'],
+    happy: ['happy', 'excited', 'joy', 'great', 'wonderful', 'amazing', 'fantastic', 'good'],
+    sad: ['sad', 'depressed', 'unhappy', 'miserable', 'down', 'gloomy', 'lonely'],
+    anxious: ['anxious', 'worried', 'nervous', 'stressed', 'tense', 'afraid', 'panic'],
+    calm: ['calm', 'peaceful', 'relaxed', 'zen', 'serene', 'tranquil', 'quiet'],
+    tired: ['tired', 'exhausted', 'sleepy', 'fatigued', 'drained', 'worn', 'sleep'],
+    energized: ['energized', 'pumped', 'motivated', 'active', 'excited', 'vibrant'],
   };
 
   let bestMood = 'calm';
@@ -38,7 +37,7 @@ function analyzeMood(method: string, data: string): { mood: string; confidence: 
 }
 
 // Games database
-const GAMES_DATABASE: any[] = [
+const GAMES_DATABASE = [
     {
         id: "2048",
         title: "2048",
@@ -82,7 +81,7 @@ const GAMES_DATABASE: any[] = [
 ];
 
 // Outfits database
-const OUTFITS_DATABASE: any = {
+const OUTFITS_DATABASE = {
     happy: ["colorful dress", "bright shirt", "fun accessories"],
     energized: ["athletic wear", "running shoes", "gym outfit"],
     tired: ["cozy sweater", "comfortable pants", "slippers"],
@@ -92,7 +91,7 @@ const OUTFITS_DATABASE: any = {
 };
 
 // Playlists database
-const PLAYLISTS_DATABASE: any = {
+const PLAYLISTS_DATABASE = {
     happy: "uplifting-vibes",
     energized: "high-energy-beats",
     tired: "chill-lofi",
@@ -101,8 +100,8 @@ const PLAYLISTS_DATABASE: any = {
     sad: "feel-good-songs",
 };
 
-function getRecommendedGames(mood: string, energy: "low" | "medium" | "high", intent: string): any[] {
-    const scoredGames = GAMES_DATABASE.map(game => {
+function getRecommendedGames(mood: string, energy: string): any[] {
+    const scoredGames = GAMES_DATABASE.map((game: any) => {
         let score = 0;
         if (game.moods.includes(mood.toLowerCase())) score += 5;
         if (game.energy === energy) score += 3;
@@ -116,42 +115,51 @@ function getRecommendedGames(mood: string, energy: "low" | "medium" | "high", in
     });
 
     return scoredGames
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 5)
-        .map(item => item.game);
+        .sort((a: any, b: any) => b.score - a.score)
+        .slice(0, 3)
+        .map((item: any) => item.game);
 }
 
 function getRecommendedOutfits(mood: string): string[] {
-    return OUTFITS_DATABASE[mood.toLowerCase()] || OUTFITS_DATABASE['calm'];
+    const outfits = (OUTFITS_DATABASE as any)[mood.toLowerCase()] || (OUTFITS_DATABASE as any)['calm'];
+    return outfits;
 }
 
 function getRecommendedPlaylists(mood: string): string {
-    return PLAYLISTS_DATABASE[mood.toLowerCase()] || PLAYLISTS_DATABASE['calm'];
+    const playlist = (PLAYLISTS_DATABASE as any)[mood.toLowerCase()] || (PLAYLISTS_DATABASE as any)['calm'];
+    return playlist;
 }
 
 // API Routes
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Health check passed' });
+  console.log('Health check');
+  res.status(200).json({ status: 'ok', message: 'Health check passed' });
 });
 
 app.post('/api/mood', (req, res) => {
+  console.log('POST /api/mood called');
+  console.log('Body:', JSON.stringify(req.body));
+  
   try {
     const { method, data } = req.body;
     
     if (!method || !data) {
+      console.log('Missing method or data');
       return res.status(400).json({ message: 'Method and data are required' });
     }
 
-    console.log(`Analyzing mood - method: ${method}`);
+    console.log(`Analyzing mood - method: ${method}, data length: ${data.length}`);
 
     // Analyze mood
     const result = analyzeMood(method, data);
     const mood = result.mood;
     const confidence = result.confidence;
 
+    console.log(`Detected mood: ${mood}, confidence: ${confidence}`);
+
     // Determine energy and intent based on mood
-    let energy: "low" | "medium" | "high" = "medium";
-    let intent: "relax" | "distract" | "focus" | "uplift" | "express" = "distract";
+    let energy: string = "medium";
+    let intent: string = "distract";
 
     switch (mood.toLowerCase()) {
       case 'happy':
@@ -181,21 +189,20 @@ app.post('/api/mood', (req, res) => {
     }
 
     // Get recommendations
-    const games = getRecommendedGames(mood, energy, intent);
+    const games = getRecommendedGames(mood, energy);
     const outfits = getRecommendedOutfits(mood);
     const playlists = getRecommendedPlaylists(mood);
 
-    console.log(`Mood: ${mood}, Games: ${games.length}, Outfits: ${outfits.length}`);
+    console.log(`Response: mood=${mood}, games=${games.length}, outfits=${outfits.length}`);
 
     return res.status(200).json({
       mood,
       energy,
       intent,
       confidence,
-      recommendations: {},
       games,
-      outfits: outfits,
-      playlists: playlists
+      outfits,
+      playlists
     });
   } catch (error) {
     console.error('Error analyzing mood:', error);
@@ -204,6 +211,7 @@ app.post('/api/mood', (req, res) => {
 });
 
 app.get('/api/mood/history', (req, res) => {
+  console.log('GET /api/mood/history');
   try {
     return res.status(200).json([]);
   } catch (error) {
@@ -212,18 +220,18 @@ app.get('/api/mood/history', (req, res) => {
   }
 });
 
-// Serve static files from dist/public
-const publicPath = path.join(__dirname, '../dist/public');
-app.use(express.static(publicPath));
-
-// SPA fallback - serve index.html for all other routes
-app.get('*', (req, res) => {
-  const indexPath = path.join(publicPath, 'index.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).json({ message: 'Not found' });
-  }
+// Catch-all for undefined routes
+app.use((req, res) => {
+  console.log('404 - Not found:', req.method, req.path);
+  res.status(404).json({ message: 'Not found', path: req.path });
 });
+
+// Error handling middleware
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Internal server error', error: String(err.message) });
+});
+
+console.log('App handlers registered');
 
 export default app;
