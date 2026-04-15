@@ -78,24 +78,288 @@ const GAMES_DATABASE = [
     },
 ];
 
-// Outfits database
+// Outfits database with images
 const OUTFITS_DATABASE = {
-    happy: ["colorful dress", "bright shirt", "fun accessories"],
-    energized: ["athletic wear", "running shoes", "gym outfit"],
-    tired: ["cozy sweater", "comfortable pants", "slippers"],
-    calm: ["light fabric", "neutral colors", "loose fit"],
-    anxious: ["comfortable clothes", "favorite jacket", "cozy socks"],
-    sad: ["uplifting colors", "favorite outfit", "comfortable layers"],
+    happy: [
+        {
+            id: "happy-1",
+            style: "Sunny Day Vibes",
+            description: "Light, airy, and full of sunshine.",
+            imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=60",
+            moods: ["happy", "relax", "calm"]
+        },
+        {
+            id: "happy-2",
+            style: "Casual Chic",
+            description: "Bright colors and comfortable fabrics to match your radiant vibe.",
+            imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=60",
+            moods: ["happy", "energized", "confident"]
+        },
+        {
+            id: "happy-3",
+            style: "Bold & Colorful",
+            description: "Stand out with vibrant patterns and bold prints.",
+            imageUrl: "https://images.unsplash.com/photo-1495562569060-2b4ca122e051?w=800&auto=format&fit=crop&q=60",
+            moods: ["happy", "energized", "fun"]
+        }
+    ],
+    energized: [
+        {
+            id: "energized-1",
+            style: "Active Wear",
+            description: "Ready for action. Functional and stylish.",
+            imageUrl: "https://images.unsplash.com/photo-1483721310020-03333e577078?w=800&auto=format&fit=crop&q=60",
+            moods: ["energized", "focus", "happy"]
+        },
+        {
+            id: "energized-2",
+            style: "Athleisure Power",
+            description: "Sporty meets fashionable for a dynamic look.",
+            imageUrl: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&auto=format&fit=crop&q=60",
+            moods: ["energized", "motivated", "active"]
+        },
+        {
+            id: "energized-3",
+            style: "Street Style Energy",
+            description: "Bold street fashion that matches your energy.",
+            imageUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop&q=60",
+            moods: ["energized", "confident", "focused"]
+        }
+    ],
+    tired: [
+        {
+            id: "tired-1",
+            style: "Cozy Comfort",
+            description: "Soft textures and relaxed fit for ultimate comfort.",
+            imageUrl: "https://images.unsplash.com/photo-1552062407-5b8b62e2b006?w=800&auto=format&fit=crop&q=60",
+            moods: ["tired", "relax", "calm"]
+        },
+        {
+            id: "tired-2",
+            style: "Loungewear Dreams",
+            description: "Oversized and snuggly, perfect for rest days.",
+            imageUrl: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&auto=format&fit=crop&q=60",
+            moods: ["tired", "comfortable", "peaceful"]
+        },
+        {
+            id: "tired-3",
+            style: "Relaxed Elegance",
+            description: "Comfortable yet put-together for low-energy days.",
+            imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&auto=format&fit=crop&q=60",
+            moods: ["tired", "calm", "cozy"]
+        }
+    ],
+    calm: [
+        {
+            id: "calm-1",
+            style: "Neutral Zen",
+            description: "Peaceful neutrals and flowing silhouettes.",
+            imageUrl: "https://images.unsplash.com/photo-1564496174161-7a46d19cd819?w=800&auto=format&fit=crop&q=60",
+            moods: ["calm", "peaceful", "serene"]
+        },
+        {
+            id: "calm-2",
+            style: "Minimalist Grace",
+            description: "Simple, clean lines that soothe the soul.",
+            imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60",
+            moods: ["calm", "focused", "peaceful"]
+        },
+        {
+            id: "calm-3",
+            style: "Soft & Serene",
+            description: "Muted tones and gentle fabrics for tranquility.",
+            imageUrl: "https://images.unsplash.com/photo-1506629082632-50f5b3acf84b?w=800&auto=format&fit=crop&q=60",
+            moods: ["calm", "relaxed", "meditative"]
+        }
+    ],
+    anxious: [
+        {
+            id: "anxious-1",
+            style: "Grounding Comfort",
+            description: "Soft and familiar pieces that feel like a hug.",
+            imageUrl: "https://images.unsplash.com/photo-1488932359169-6e4ee5745b45?w=800&auto=format&fit=crop&q=60",
+            moods: ["anxious", "comforted", "safe"]
+        },
+        {
+            id: "anxious-2",
+            style: "Secure Layers",
+            description: "Layered pieces that provide comfort and security.",
+            imageUrl: "https://images.unsplash.com/photo-1515759371602-8c4e8d8d8d8d?w=800&auto=format&fit=crop&q=60",
+            moods: ["anxious", "protected", "calm"]
+        },
+        {
+            id: "anxious-3",
+            style: "Reassuring Embrace",
+            description: "Cozy textures and favorite colors for reassurance.",
+            imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&auto=format&fit=crop&q=60",
+            moods: ["anxious", "supported", "peaceful"]
+        }
+    ],
+    sad: [
+        {
+            id: "sad-1",
+            style: "Uplifting Warmth",
+            description: "Warm tones and comforting layers for support.",
+            imageUrl: "https://images.unsplash.com/photo-1515537495e0-f465e3b8a699?w=800&auto=format&fit=crop&q=60",
+            moods: ["sad", "comforted", "hopeful"]
+        },
+        {
+            id: "sad-2",
+            style: "Feel-Good Fashion",
+            description: "Colors that lift your spirits and brighten your day.",
+            imageUrl: "https://images.unsplash.com/photo-1539533057440-7814a65d4c17?w=800&auto=format&fit=crop&q=60",
+            moods: ["sad", "uplifted", "joyful"]
+        },
+        {
+            id: "sad-3",
+            style: "Self-Care Style",
+            description: "Gentle, supportive pieces for when you need kindness.",
+            imageUrl: "https://images.unsplash.com/photo-1496747611176-843222e1e0c0?w=800&auto=format&fit=crop&q=60",
+            moods: ["sad", "cared-for", "healing"]
+        }
+    ]
 };
 
-// Playlists database
+// Playlists database with Spotify IDs
 const PLAYLISTS_DATABASE = {
-    happy: "uplifting-vibes",
-    energized: "high-energy-beats",
-    tired: "chill-lofi",
-    calm: "peaceful-sounds",
-    anxious: "calming-music",
-    sad: "feel-good-songs",
+    happy: [
+        {
+            id: "happy-1",
+            spotifyId: "37i9dQZF1DX3rxVfyb1Uw9",
+            title: "Mood Booster",
+            description: "Get happy with today's dose of feel-good songs!",
+            moods: ["happy", "energized", "uplift"]
+        },
+        {
+            id: "happy-2",
+            spotifyId: "37i9dQZF1DX4fpCWaHOned",
+            title: "Confidence Boost",
+            description: "You're on top of the world.",
+            moods: ["confident", "happy", "focus"]
+        },
+        {
+            id: "happy-3",
+            spotifyId: "37i9dQZF1DX7gIoqq7P9Pg",
+            title: "Good as Hell",
+            description: "Feel amazing and confident with these uplifting tracks.",
+            moods: ["happy", "confident", "empowered"]
+        }
+    ],
+    energized: [
+        {
+            id: "energized-1",
+            spotifyId: "37i9dQZF1DXb22RyAdL3J5",
+            title: "Beast Mode",
+            description: "High-energy workout beats to keep you moving.",
+            moods: ["energized", "motivated", "active"]
+        },
+        {
+            id: "energized-2",
+            spotifyId: "37i9dQZF1DXdPec7aLTmlC",
+            title: "Power Hour",
+            description: "Pump-up music for maximum energy.",
+            moods: ["energized", "focused", "powerful"]
+        },
+        {
+            id: "energized-3",
+            spotifyId: "37i9dQZF1DXdMGP7h8ijf0",
+            title: "Cardio Club",
+            description: "Fast-paced beats perfect for cardio and movement.",
+            moods: ["energized", "active", "motivated"]
+        }
+    ],
+    tired: [
+        {
+            id: "tired-1",
+            spotifyId: "37i9dQZF1DWZhUJlQlxGFi",
+            title: "Chill Lofi Beats",
+            description: "Relaxing lo-fi hip-hop for rest and recovery.",
+            moods: ["tired", "peaceful", "relaxed"]
+        },
+        {
+            id: "tired-2",
+            spotifyId: "37i9dQZF1DX7gIoqq7P9Pg",
+            title: "Sleep Sounds",
+            description: "Ambient sounds to help you rest and recharge.",
+            moods: ["tired", "sleepy", "calm"]
+        },
+        {
+            id: "tired-3",
+            spotifyId: "37i9dQZF1DX1wAqNItJcJX",
+            title: "Night Wind Down",
+            description: "Mellow tracks for a peaceful evening.",
+            moods: ["tired", "calm", "restful"]
+        }
+    ],
+    calm: [
+        {
+            id: "calm-1",
+            spotifyId: "37i9dQZF1DX1fMg7LSSX2g",
+            title: "Peaceful Piano",
+            description: "Serene piano music for meditation and focus.",
+            moods: ["calm", "meditative", "peaceful"]
+        },
+        {
+            id: "calm-2",
+            spotifyId: "37i9dQZF1DX8FUigjlQcKu",
+            title: "Nature Sounds",
+            description: "Calming nature sounds and ambient music.",
+            moods: ["calm", "relaxed", "grounded"]
+        },
+        {
+            id: "calm-3",
+            spotifyId: "37i9dQZF1DX3Amo9WHy5pD",
+            title: "Zen Meditation",
+            description: "Perfect for meditation, yoga, and relaxation.",
+            moods: ["calm", "meditative", "serene"]
+        }
+    ],
+    anxious: [
+        {
+            id: "anxious-1",
+            spotifyId: "37i9dQZF1DX7gIoqq7P9Pg",
+            title: "Anxiety Relief",
+            description: "Calming music to ease worry and stress.",
+            moods: ["anxious", "calm", "supported"]
+        },
+        {
+            id: "anxious-2",
+            spotifyId: "37i9dQZF1DX1fMg7LSSX2g",
+            title: "Breathe Easy",
+            description: "Gentle melodies to help you relax and breathe.",
+            moods: ["anxious", "relaxed", "grounded"]
+        },
+        {
+            id: "anxious-3",
+            spotifyId: "37i9dQZF1DX5J7mkh3e3Th",
+            title: "Calm Mind",
+            description: "Soothing music for anxious moments.",
+            moods: ["anxious", "peaceful", "safe"]
+        }
+    ],
+    sad: [
+        {
+            id: "sad-1",
+            spotifyId: "37i9dQZF1DX4a8epQlUGRV",
+            title: "Feel Good Songs",
+            description: "Uplifting music to brighten your day.",
+            moods: ["sad", "uplifted", "hopeful"]
+        },
+        {
+            id: "sad-2",
+            spotifyId: "37i9dQZF1DWWQRwUI0ExYD",
+            title: "Happy Hits",
+            description: "Joyful songs to lift your mood.",
+            moods: ["sad", "joyful", "inspired"]
+        },
+        {
+            id: "sad-3",
+            spotifyId: "37i9dQZF1DX7KNlDXK8FDY",
+            title: "Healing Vibes",
+            description: "Emotional and healing music for reflection.",
+            moods: ["sad", "healing", "supported"]
+        }
+    ]
 };
 
 function getRecommendedGames(mood: string, energy: string): any[] {
@@ -205,6 +469,142 @@ app.get('/api/mood/history', (req, res) => {
     return res.status(200).json([]);
   } catch (error) {
     return res.status(500).json({ message: 'Failed to fetch mood history' });
+  }
+});
+
+// Journal hardcoded questions and answers database
+const JOURNAL_Q_AND_A = [
+  {
+    id: 1,
+    question: "What made you smile today?",
+    sampleAnswer: "Spending time with my best friend laughing over coffee made me feel truly connected and happy.",
+    mood: "happy"
+  },
+  {
+    id: 2,
+    question: "What are you grateful for right now?",
+    sampleAnswer: "I'm grateful for my health, my supportive family, and the opportunity to pursue my dreams.",
+    mood: "calm"
+  },
+  {
+    id: 3,
+    question: "What challenge did you overcome today?",
+    sampleAnswer: "I finally finished that difficult project I've been procrastinating on. It feels amazing to accomplish it!",
+    mood: "energized"
+  },
+  {
+    id: 4,
+    question: "What would make tomorrow better?",
+    sampleAnswer: "Getting good sleep tonight and starting fresh with a positive mindset would make tomorrow much better.",
+    mood: "tired"
+  },
+  {
+    id: 5,
+    question: "What are you worried about?",
+    sampleAnswer: "I'm concerned about the upcoming presentation, but I've prepared well and I know I can do this.",
+    mood: "anxious"
+  },
+  {
+    id: 6,
+    question: "How are you feeling right now?",
+    sampleAnswer: "I'm feeling a bit down, but I know this is temporary. I'm taking things one step at a time.",
+    mood: "sad"
+  },
+  {
+    id: 7,
+    question: "What did you learn today?",
+    sampleAnswer: "I learned that it's okay to ask for help, and that vulnerability is actually a strength.",
+    mood: "calm"
+  },
+  {
+    id: 8,
+    question: "What are you proud of?",
+    sampleAnswer: "I'm proud of myself for staying consistent with my goals and not giving up when things got tough.",
+    mood: "energized"
+  },
+  {
+    id: 9,
+    question: "What brought you peace today?",
+    sampleAnswer: "Taking a walk in nature and listening to my favorite music helped calm my mind.",
+    mood: "calm"
+  },
+  {
+    id: 10,
+    question: "What are your hopes for tomorrow?",
+    sampleAnswer: "I hope tomorrow brings new opportunities, good conversations, and moments of joy.",
+    mood: "happy"
+  }
+];
+
+// Journal entries GET endpoint
+app.get('/api/journal', (req, res) => {
+  try {
+    // Return hardcoded journal entries
+    const entries = [
+      {
+        id: 1,
+        content: "Had an amazing day at work! Completed my biggest project.",
+        mood: "happy",
+        date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        summary: "Productive day at work"
+      },
+      {
+        id: 2,
+        content: "Feeling a bit overwhelmed with everything going on. Need to take a step back.",
+        mood: "anxious",
+        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        summary: "Feeling overwhelmed"
+      },
+      {
+        id: 3,
+        content: "Had a great workout and feel energized. Starting to feel like myself again.",
+        mood: "energized",
+        date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        summary: "Workout and energy boost"
+      }
+    ];
+    res.status(200).json(entries);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch journal entries', error: String(error) });
+  }
+});
+
+// Journal questions GET endpoint
+app.get('/api/journal/questions', (req, res) => {
+  try {
+    res.status(200).json(JOURNAL_Q_AND_A);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch questions', error: String(error) });
+  }
+});
+
+// Journal chat POST endpoint
+app.post('/api/journal/chat', (req, res) => {
+  try {
+    const { message, mood } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({ message: 'Message is required' });
+    }
+
+    // Return an encouraging response based on mood
+    const moodResponses: any = {
+      happy: "That sounds wonderful! Keep spreading that joy and positive energy! 🌟",
+      energized: "Your energy is contagious! Keep channeling that motivation into great things! ⚡",
+      tired: "It's okay to rest and recharge. You deserve some peace and relaxation. 💤",
+      calm: "Beautiful. Take a moment to appreciate this peace you've found. You're doing great. 🧘",
+      anxious: "It's okay to feel worried sometimes. Remember to breathe and take things one step at a time. You've got this. 💙",
+      sad: "I hear you. It's important to acknowledge your feelings. Remember, this is temporary, and you're stronger than you think. 💛"
+    };
+
+    const response = moodResponses[mood?.toLowerCase()] || "Thank you for sharing. Your feelings matter and are valid. 💜";
+
+    res.status(200).json({
+      message: response,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to process journal entry', error: String(error) });
   }
 });
 
