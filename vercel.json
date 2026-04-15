@@ -1,19 +1,4 @@
 {
-    "version": 2,
     "buildCommand": "bun run build",
-    "builds": [
-        {
-            "src": "api/index.ts",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": "dist/public/**"
-            }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/api/index.ts"
-        }
-    ]
+    "outputDirectory": "dist/public"
 }
