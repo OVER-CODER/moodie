@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 
+// API Handler with games connection fix
 const app = express();
 
 app.use(express.json());
