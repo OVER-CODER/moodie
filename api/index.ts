@@ -1,9 +1,12 @@
-
 import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "../server/routes";
-import { serveStatic } from "../server/static";
 import { createServer } from "http";
+
+declare module "http" {
+  interface IncomingMessage {
+    rawBody: unknown;
+  }
+}
 
 const app = express();
 const httpServer = createServer(app);
@@ -51,6 +54,10 @@ async function initializeApp() {
   initialized = true;
 
   try {
+    // Use dynamic import to load registerRoutes from server
+    const { registerRoutes } = await import("../server/routes");
+    const { serveStatic } = await import("../server/static");
+    
     await registerRoutes(httpServer, app);
 
     app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
