@@ -514,7 +514,7 @@ function getRecommendedGames(mood: string, energy: string): any[] {
 
     return scoredGames
         .sort((a: any, b: any) => b.score - a.score)
-        .slice(0, 3)
+        .slice(0, 5)
         .map((item: any) => item.game);
 }
 
