@@ -37,6 +37,7 @@ function analyzeMood(method: string, data: string): { mood: string; confidence: 
 
 // Games database
 const GAMES_DATABASE = [
+    // Puzzle & Relaxation Games
     {
         id: "2048",
         title: "2048",
@@ -56,6 +57,34 @@ const GAMES_DATABASE = [
         thumbnail: "https://images.unsplash.com/photo-1535721471682-b52f519dba45?w=800&auto=format&fit=crop&q=60"
     },
     {
+        id: "tic-tac-toe",
+        title: "Tic Tac Toe Master",
+        url: "https://playtictactoe.org/",
+        description: "Challenge the AI in this classic strategy game.",
+        energy: "low",
+        moods: ["stressed", "focus", "anxious"],
+        thumbnail: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "flappy-bird",
+        title: "Flappy Bird",
+        url: "https://flappybird.io/",
+        description: "A simple yet challenging game of timing and precision.",
+        energy: "medium",
+        moods: ["bored", "focus", "energized"],
+        thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "snake-game",
+        title: "Classic Snake",
+        url: "https://playsnake.org/",
+        description: "The classic snake game. How long can you grow?",
+        energy: "medium",
+        moods: ["bored", "focus", "calm"],
+        thumbnail: "https://images.unsplash.com/photo-1577401132019-40a89ada56e7?w=800&auto=format&fit=crop&q=60"
+    },
+    // Action & Adventure Games
+    {
         id: "crossy-road",
         title: "Crossy Road Web",
         url: "https://poki.com/en/g/crossy-road",
@@ -74,14 +103,115 @@ const GAMES_DATABASE = [
         thumbnail: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800&auto=format&fit=crop&q=60"
     },
     {
-        id: "tic-tac-toe",
-        title: "Tic Tac Toe Master",
-        url: "https://playtictactoe.org/",
-        description: "Challenge the AI in this classic strategy game.",
+        id: "geometry-dash",
+        title: "Geometry Dash",
+        url: "https://www.geometrydash.com/",
+        description: "Jump and fly through obstacles in this rhythm-based platformer.",
+        energy: "high",
+        moods: ["energized", "happy", "pumped"],
+        thumbnail: "https://images.unsplash.com/photo-1535371557131-206a148b63cb?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "tank-trouble",
+        title: "Tank Trouble",
+        url: "https://www.tanktrouble.com/",
+        description: "Navigate mazes and destroy enemy tanks in this classic game.",
+        energy: "high",
+        moods: ["energized", "competitive", "happy"],
+        thumbnail: "https://images.unsplash.com/photo-1552048558-2b0db5a4da93?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "slither-io",
+        title: "Slither.io",
+        url: "https://slither.io/",
+        description: "Grow your snake by consuming glowing pellets while avoiding others.",
+        energy: "high",
+        moods: ["happy", "energized", "competitive"],
+        thumbnail: "https://images.unsplash.com/photo-1599923453022-874e16a63ee6?w=800&auto=format&fit=crop&q=60"
+    },
+    // Relaxing & Mindful Games
+    {
+        id: "threes",
+        title: "Threes!",
+        url: "https://threesjs.com/",
+        description: "A beautiful puzzle game about combining numbers thoughtfully.",
         energy: "low",
-        moods: ["stressed", "focus", "anxious"],
+        moods: ["calm", "tired", "peaceful"],
+        thumbnail: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "chess",
+        title: "Free Online Chess",
+        url: "https://www.chess.com/play/online",
+        description: "Play chess against the computer or other players. A game of strategy and patience.",
+        energy: "low",
+        moods: ["focused", "calm", "thoughtful"],
+        thumbnail: "https://images.unsplash.com/photo-1586165368502-881b72b27e58?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "minilingo",
+        title: "Language Boost",
+        url: "https://www.duolingo.com/",
+        description: "Learn while you play with fun language games.",
+        energy: "medium",
+        moods: ["calm", "focus", "productive"],
+        thumbnail: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "color-match",
+        title: "Candy Crush Saga",
+        url: "https://www.kingdomgreatestshow.com/",
+        description: "Match colorful candies in this addictive puzzle game.",
+        energy: "medium",
+        moods: ["bored", "calm", "happy"],
+        thumbnail: "https://images.unsplash.com/photo-1578432287150-fd5f3c3d09da?w=800&auto=format&fit=crop&q=60"
+    },
+    // Casual & Fun Games
+    {
+        id: "cookie-clicker",
+        title: "Cookie Clicker",
+        url: "https://orteil.dashnet.org/cookieclicker/",
+        description: "Click cookies and build an empire. A simple but addictive idle game.",
+        energy: "low",
+        moods: ["bored", "relaxed", "happy"],
+        thumbnail: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "wordle",
+        title: "Wordle",
+        url: "https://www.nytimes.com/games/wordle/index.html",
+        description: "Guess the word in 6 tries. A daily puzzle game for word lovers.",
+        energy: "medium",
+        moods: ["focused", "calm", "productive"],
+        thumbnail: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "minesweeper",
+        title: "Minesweeper",
+        url: "https://www.minesweeper.online/",
+        description: "Uncover the board without hitting any mines. Test your logic and luck.",
+        energy: "medium",
+        moods: ["focus", "calm", "thoughtful"],
+        thumbnail: "https://images.unsplash.com/photo-1551632786-de41ec16aWeChat?w=800&auto=format&fit=crop&q=60"
+    },
+    {
+        id: "connect-four",
+        title: "Connect Four",
+        url: "https://www.mathsisfun.com/games/connect4.html",
+        description: "Get four in a row before your opponent does. A classic strategy game.",
+        energy: "low",
+        moods: ["focused", "calm", "competitive"],
         thumbnail: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&auto=format&fit=crop&q=60"
     },
+    {
+        id: "2048-variants",
+        title: "2048 Variants",
+        url: "https://yaumkamper.github.io/2048-variants-web/",
+        description: "Explore creative variations of the 2048 puzzle game.",
+        energy: "low",
+        moods: ["calm", "bored", "relaxed"],
+        thumbnail: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&auto=format&fit=crop&q=60"
+    }
 ];
 
 // Outfits database with images
