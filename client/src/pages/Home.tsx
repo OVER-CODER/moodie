@@ -53,8 +53,8 @@ export default function Home() {
 
           <div className="flex gap-4 items-center">
             <SignedOut>
-              <SignInButton mode="modal">
-                <button className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
+              <SignInButton mode="modal" forceRedirectUrl="/">
+                <button className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors cursor-pointer">
                   Sign In
                 </button>
               </SignInButton>
@@ -82,8 +82,8 @@ export default function Home() {
               </p>
 
               <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="bg-gray-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-all">
+                <SignInButton mode="modal" forceRedirectUrl="/">
+                  <button className="bg-gray-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-all cursor-pointer">
                     Get Started
                   </button>
                 </SignInButton>
